@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import * as reportsService from '../services/reports.service.js';
-import { openrouterProvider } from '../services/providers/openrouter.provider.js';
+import { resolveProvider } from '../services/ai.service.js';
 
 const generateSchema = z.object({
   dictation: z.string().min(1),
@@ -24,11 +24,12 @@ export async function generate(req: Request, res: Response): Promise<void> {
   }
 
   try {
+    const provider = await resolveProvider();
     const response = await reportsService.generateReport(
       req.user.userId,
       result.data.dictation,
       result.data.sessionHistory,
-      openrouterProvider,
+      provider,
       result.data.sessionId
     );
     res.json(response);
