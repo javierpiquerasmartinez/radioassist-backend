@@ -5,6 +5,7 @@ import { claudeProvider } from '../services/providers/claude.provider.js';
 
 const generateSchema = z.object({
   dictado: z.string().min(1),
+  sessionId: z.string().uuid().optional(),
   historialSesion: z
     .array(
       z.object({
@@ -27,7 +28,8 @@ export async function generate(req: Request, res: Response): Promise<void> {
       req.user.userId,
       result.data.dictado,
       result.data.historialSesion,
-      claudeProvider
+      claudeProvider,
+      result.data.sessionId
     );
     res.json(response);
   } catch (err) {

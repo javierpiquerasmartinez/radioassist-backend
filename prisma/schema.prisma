@@ -32,6 +32,7 @@ model Report {
   id                String   @id @default(uuid())
   usuarioId         String
   usuario           Usuario  @relation(fields: [usuarioId], references: [id])
+  sessionId         String?
   templateUsed      String
   originalDictation String
   generatedReport   String

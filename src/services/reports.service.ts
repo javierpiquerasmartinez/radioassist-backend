@@ -6,7 +6,8 @@ export async function generateReport(
   userId: string,
   dictado: string,
   sessionHistory: Message[],
-  aiProvider: AIProvider
+  aiProvider: AIProvider,
+  sessionId?: string
 ) {
   const user = await prisma.usuario.findUnique({
     where: { id: userId },
@@ -26,6 +27,7 @@ export async function generateReport(
     await prisma.report.create({
       data: {
         usuarioId: userId,
+        sessionId,
         templateUsed: aiResponse.plantillaDetectada,
         originalDictation: dictado,
         generatedReport: aiResponse.contenido,
