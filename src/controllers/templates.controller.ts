@@ -46,7 +46,7 @@ export async function update(req: Request, res: Response): Promise<void> {
 
   try {
     const template = await templatesService.update(
-      req.params.id,
+      req.params['id'] as string,
       req.user.userId,
       result.data.name,
       result.data.content
@@ -60,7 +60,7 @@ export async function update(req: Request, res: Response): Promise<void> {
 
 export async function remove(req: Request, res: Response): Promise<void> {
   try {
-    await templatesService.remove(req.params.id, req.user.userId);
+    await templatesService.remove(req.params['id'] as string, req.user.userId);
     res.status(204).send();
   } catch (err) {
     const e = err as Error & { status?: number };
