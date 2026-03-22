@@ -12,7 +12,10 @@ const options: swaggerJsdoc.Options = {
       version: '1.0.0',
       description: 'AI-assisted radiology report generation — REST API',
     },
-    servers: [{ url: `http://localhost:${process.env.PORT ?? 3000}` }],
+    servers: [
+      ...(process.env.PUBLIC_URL ? [{ url: process.env.PUBLIC_URL }] : []),
+      { url: `http://localhost:${process.env.PORT ?? 3000}` },
+    ],
     components: {
       securitySchemes: {
         bearerAuth: {
