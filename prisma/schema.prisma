@@ -8,17 +8,17 @@ datasource db {
 }
 
 model Usuario {
-  id           String             @id @default(uuid())
-  email        String             @unique
+  id           String           @id @default(uuid())
+  email        String           @unique
   nombre       String
   passwordHash String
-  preferencias Json               @default("{}")
-  plantillas   Plantilla[]
+  preferencias Json             @default("{}")
+  templates    Template[]
   historial    HistorialInforme[]
-  createdAt    DateTime           @default(now())
+  createdAt    DateTime         @default(now())
 }
 
-model Plantilla {
+model Template {
   id        String   @id @default(uuid())
   usuarioId String
   usuario   Usuario  @relation(fields: [usuarioId], references: [id])
@@ -32,7 +32,7 @@ model HistorialInforme {
   id              String   @id @default(uuid())
   usuarioId       String
   usuario         Usuario  @relation(fields: [usuarioId], references: [id])
-  plantillaUsada  String
+  templateUsed    String
   dictadoOriginal String
   informeGenerado String
   createdAt       DateTime @default(now())
