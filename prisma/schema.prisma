@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id           String             @id @default(uuid())
+  email        String             @unique
+  nombre       String
+  passwordHash String
+  preferencias Json               @default("{}")
+  plantillas   Plantilla[]
+  historial    HistorialInforme[]
+  createdAt    DateTime           @default(now())
+}
+
+model Plantilla {
+  id        String   @id @default(uuid())
+  usuarioId String
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  nombre    String
+  contenido String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HistorialInforme {
+  id              String   @id @default(uuid())
+  usuarioId       String
+  usuario         Usuario  @relation(fields: [usuarioId], references: [id])
+  plantillaUsada  String
+  dictadoOriginal String
+  informeGenerado String
+  createdAt       DateTime @default(now())
+
+  // IMPORTANT: never store patient name or any identifying data
+}
