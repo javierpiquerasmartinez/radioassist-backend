@@ -42,7 +42,7 @@ export async function login(email: string, password: string) {
 export async function getMe(userId: string) {
   const user = await prisma.usuario.findUnique({
     where: { id: userId },
-    include: { plantillas: true },
+    include: { templates: true },
   });
 
   if (!user) {
