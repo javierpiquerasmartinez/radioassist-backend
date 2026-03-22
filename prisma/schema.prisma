@@ -8,14 +8,14 @@ datasource db {
 }
 
 model Usuario {
-  id           String           @id @default(uuid())
-  email        String           @unique
+  id           String     @id @default(uuid())
+  email        String     @unique
   nombre       String
   passwordHash String
-  preferencias Json             @default("{}")
+  preferencias Json       @default("{}")
   templates    Template[]
-  historial    HistorialInforme[]
-  createdAt    DateTime         @default(now())
+  reports      Report[]
+  createdAt    DateTime   @default(now())
 }
 
 model Template {
@@ -28,14 +28,14 @@ model Template {
   updatedAt DateTime @updatedAt
 }
 
-model HistorialInforme {
-  id              String   @id @default(uuid())
-  usuarioId       String
-  usuario         Usuario  @relation(fields: [usuarioId], references: [id])
-  templateUsed    String
-  dictadoOriginal String
-  informeGenerado String
-  createdAt       DateTime @default(now())
+model Report {
+  id                String   @id @default(uuid())
+  usuarioId         String
+  usuario           Usuario  @relation(fields: [usuarioId], references: [id])
+  templateUsed      String
+  originalDictation String
+  generatedReport   String
+  createdAt         DateTime @default(now())
 
   // IMPORTANT: never store patient name or any identifying data
 }
