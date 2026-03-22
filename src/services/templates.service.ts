@@ -2,21 +2,21 @@ import prisma from '../utils/prisma.js';
 
 export async function getAll(userId: string) {
   return prisma.template.findMany({
-    where: { usuarioId: userId },
+    where: { userId },
     orderBy: { createdAt: 'asc' },
   });
 }
 
-export async function create(userId: string, nombre: string, contenido: string) {
+export async function create(userId: string, name: string, content: string) {
   return prisma.template.create({
-    data: { usuarioId: userId, nombre, contenido },
+    data: { userId, name, content },
   });
 }
 
-export async function update(id: string, userId: string, nombre: string, contenido: string) {
+export async function update(id: string, userId: string, name: string, content: string) {
   const template = await prisma.template.findUnique({ where: { id } });
 
-  if (!template || template.usuarioId !== userId) {
+  if (!template || template.userId !== userId) {
     const err = new Error('Template not found') as Error & { status: number };
     err.status = 404;
     throw err;
@@ -24,14 +24,14 @@ export async function update(id: string, userId: string, nombre: string, conteni
 
   return prisma.template.update({
     where: { id },
-    data: { nombre, contenido },
+    data: { name, content },
   });
 }
 
 export async function remove(id: string, userId: string) {
   const template = await prisma.template.findUnique({ where: { id } });
 
-  if (!template || template.usuarioId !== userId) {
+  if (!template || template.userId !== userId) {
     const err = new Error('Template not found') as Error & { status: number };
     err.status = 404;
     throw err;

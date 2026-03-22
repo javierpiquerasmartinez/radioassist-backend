@@ -4,11 +4,11 @@ export interface Message {
 }
 
 export interface AIResponse {
-  tipo: 'informe' | 'pregunta';
-  contenido: string;
-  plantillaDetectada: string;
+  type: 'report' | 'question';
+  content: string;
+  templateDetected: string;
 }
 
 export interface AIProvider {
-  generate(systemPrompt: string, history: Message[], dictado: string): Promise<AIResponse>;
+  generate(systemPrompt: string, history: Message[], dictation: string): Promise<AIResponse>;
 }

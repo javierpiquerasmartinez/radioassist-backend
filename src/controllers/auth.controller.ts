@@ -4,7 +4,7 @@ import * as authService from '../services/auth.service.js';
 
 const registerSchema = z.object({
   email: z.string().email(),
-  nombre: z.string().min(1),
+  name: z.string().min(1),
   password: z.string().min(8),
 });
 
@@ -23,7 +23,7 @@ export async function register(req: Request, res: Response): Promise<void> {
   try {
     const user = await authService.register(
       result.data.email,
-      result.data.nombre,
+      result.data.name,
       result.data.password
     );
     res.status(201).json(user);

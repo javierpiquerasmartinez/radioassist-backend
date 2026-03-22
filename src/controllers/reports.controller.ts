@@ -4,9 +4,9 @@ import * as reportsService from '../services/reports.service.js';
 import { claudeProvider } from '../services/providers/claude.provider.js';
 
 const generateSchema = z.object({
-  dictado: z.string().min(1),
+  dictation: z.string().min(1),
   sessionId: z.string().uuid().optional(),
-  historialSesion: z
+  sessionHistory: z
     .array(
       z.object({
         role: z.enum(['user', 'assistant']),
@@ -26,8 +26,8 @@ export async function generate(req: Request, res: Response): Promise<void> {
   try {
     const response = await reportsService.generateReport(
       req.user.userId,
-      result.data.dictado,
-      result.data.historialSesion,
+      result.data.dictation,
+      result.data.sessionHistory,
       claudeProvider,
       result.data.sessionId
     );

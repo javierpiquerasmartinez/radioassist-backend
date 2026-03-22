@@ -4,12 +4,12 @@ import type { AIProvider, Message } from './ai.service.js';
 
 export async function generateReport(
   userId: string,
-  dictado: string,
+  dictation: string,
   sessionHistory: Message[],
   aiProvider: AIProvider,
   sessionId?: string
 ) {
-  const user = await prisma.usuario.findUnique({
+  const user = await prisma.user.findUnique({
     where: { id: userId },
     include: { templates: true },
   });
@@ -21,16 +21,16 @@ export async function generateReport(
   }
 
   const systemPrompt = buildSystemPrompt(user);
-  const aiResponse = await aiProvider.generate(systemPrompt, sessionHistory, dictado);
+  const aiResponse = await aiProvider.generate(systemPrompt, sessionHistory, dictation);
 
-  if (aiResponse.tipo === 'informe') {
+  if (aiResponse.type === 'report') {
     await prisma.report.create({
       data: {
-        usuarioId: userId,
+        userId,
         sessionId,
-        templateUsed: aiResponse.plantillaDetectada,
-        originalDictation: dictado,
-        generatedReport: aiResponse.contenido,
+        templateUsed: aiResponse.templateDetected,
+        originalDictation: dictation,
+        generatedReport: aiResponse.content,
       },
     });
   }
@@ -40,10 +40,11 @@ export async function generateReport(
 
 export async function getHistory(userId: string) {
   return prisma.report.findMany({
-    where: { usuarioId: userId },
+    where: { userId },
     orderBy: { createdAt: 'desc' },
     select: {
       id: true,
+      sessionId: true,
       templateUsed: true,
       originalDictation: true,
       generatedReport: true,

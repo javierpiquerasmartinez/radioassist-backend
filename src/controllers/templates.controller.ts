@@ -3,8 +3,8 @@ import { z } from 'zod';
 import * as templatesService from '../services/templates.service.js';
 
 const templateSchema = z.object({
-  nombre: z.string().min(1),
-  contenido: z.string().min(1),
+  name: z.string().min(1),
+  content: z.string().min(1),
 });
 
 export async function getAll(req: Request, res: Response): Promise<void> {
@@ -27,8 +27,8 @@ export async function create(req: Request, res: Response): Promise<void> {
   try {
     const template = await templatesService.create(
       req.user.userId,
-      result.data.nombre,
-      result.data.contenido
+      result.data.name,
+      result.data.content
     );
     res.status(201).json(template);
   } catch (err) {
@@ -48,8 +48,8 @@ export async function update(req: Request, res: Response): Promise<void> {
     const template = await templatesService.update(
       req.params.id,
       req.user.userId,
-      result.data.nombre,
-      result.data.contenido
+      result.data.name,
+      result.data.content
     );
     res.json(template);
   } catch (err) {

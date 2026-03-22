@@ -2,8 +2,8 @@ import bcrypt from 'bcryptjs';
 import prisma from '../utils/prisma.js';
 import { signToken } from '../utils/jwt.js';
 
-export async function register(email: string, nombre: string, password: string) {
-  const existing = await prisma.usuario.findUnique({ where: { email } });
+export async function register(email: string, name: string, password: string) {
+  const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
     const err = new Error('Email already in use') as Error & { status: number };
     err.status = 409;
@@ -11,16 +11,16 @@ export async function register(email: string, nombre: string, password: string) 
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
-  const user = await prisma.usuario.create({
-    data: { email, nombre, passwordHash },
-    select: { id: true, email: true, nombre: true, createdAt: true },
+  const user = await prisma.user.create({
+    data: { email, name, passwordHash },
+    select: { id: true, email: true, name: true, createdAt: true },
   });
 
   return user;
 }
 
 export async function login(email: string, password: string) {
-  const user = await prisma.usuario.findUnique({ where: { email } });
+  const user = await prisma.user.findUnique({ where: { email } });
 
   // Deliberate vague error to avoid user enumeration
   if (!user) {
@@ -40,7 +40,7 @@ export async function login(email: string, password: string) {
 }
 
 export async function getMe(userId: string) {
-  const user = await prisma.usuario.findUnique({
+  const user = await prisma.user.findUnique({
     where: { id: userId },
     include: { templates: true },
   });

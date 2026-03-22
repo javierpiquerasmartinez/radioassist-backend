@@ -11,26 +11,30 @@ function parseResponse(text: string): AIResponse {
   try {
     const parsed = JSON.parse(cleaned) as AIResponse;
 
-    if (parsed.tipo !== 'informe' && parsed.tipo !== 'pregunta') {
-      throw new Error('Unexpected tipo value');
+    if (parsed.type !== 'report' && parsed.type !== 'question') {
+      throw new Error('Unexpected type value');
     }
 
     return parsed;
   } catch {
     // Fallback: if parsing fails, treat the raw text as a question
     return {
-      tipo: 'pregunta',
-      contenido: text,
-      plantillaDetectada: '',
+      type: 'question',
+      content: text,
+      templateDetected: '',
     };
   }
 }
 
 export const claudeProvider: AIProvider = {
-  async generate(systemPrompt: string, history: Message[], dictado: string): Promise<AIResponse> {
+  async generate(
+    systemPrompt: string,
+    history: Message[],
+    dictation: string
+  ): Promise<AIResponse> {
     const messages: Anthropic.MessageParam[] = [
       ...history.map((m) => ({ role: m.role, content: m.content })),
-      { role: 'user', content: dictado },
+      { role: 'user', content: dictation },
     ];
 
     const response = await client.messages.create({
