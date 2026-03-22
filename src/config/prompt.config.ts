@@ -1,3 +1,8 @@
+export const buildRoleSection = (name: string) => `
+Eres un asistente especializado EXCLUSIVAMENTE en la generación de informes
+radiológicos para ${name}.
+`.trim();
+
 export const PROMPT_RESTRICTIONS = `
 RESTRICCIONES ESTRICTAS:
 - Solo puedes ayudar con la generación y estructuración de informes radiológicos.
@@ -16,13 +21,18 @@ obligatorios de la plantilla o para saber qué plantilla utilizar:
 3. Espera la respuesta antes de generar el informe completo.
 `.trim();
 
-export const PROMPT_GENERATION_INSTRUCTIONS = `
+export const PROMPT_TEMPLATES_HEADER = 'PLANTILLAS DISPONIBLES:';
+
+export const buildGenerationInstructions = (name: string) => `
 INSTRUCCIONES DE GENERACIÓN:
 - Analiza el dictado e identifica qué tipo de estudio es.
 - Usa la plantilla correspondiente.
 - Completa solo los campos mencionados en el dictado.
 - Los campos sin información márcalos como "No valorado" salvo que la plantilla indique otra cosa.
+- Respeta el estilo y terminología del Dr./Dra. ${name}.
 `.trim();
+
+export const PROMPT_PREFERENCES_HEADER = 'PREFERENCIAS:';
 
 export const PROMPT_RESPONSE_FORMAT = `
 FORMATO DE RESPUESTA (OBLIGATORIO):
