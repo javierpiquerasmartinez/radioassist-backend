@@ -13,7 +13,7 @@ export async function register(email: string, name: string, password: string) {
   const passwordHash = await bcrypt.hash(password, 10);
   const user = await prisma.user.create({
     data: { email, name, passwordHash },
-    select: { id: true, email: true, name: true, createdAt: true },
+    select: { id: true, email: true, name: true, isActive: true, createdAt: true },
   });
 
   return user;
@@ -33,6 +33,12 @@ export async function login(email: string, password: string) {
   if (!valid) {
     const err = new Error('Invalid credentials') as Error & { status: number };
     err.status = 401;
+    throw err;
+  }
+
+  if (!user.isActive) {
+    const err = new Error('Account pending activation') as Error & { status: number };
+    err.status = 403;
     throw err;
   }
 

@@ -13,6 +13,7 @@ model User {
   name         String
   passwordHash String
   preferences  Json       @default("{}")
+  isActive     Boolean    @default(false)
   templates    Template[]
   reports      Report[]
   createdAt    DateTime   @default(now())
